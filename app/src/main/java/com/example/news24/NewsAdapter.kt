@@ -28,19 +28,17 @@ class NewsAdapter(val a: Activity, val articles: ArrayList<Article>) :
         position: Int
     ) {
         holder.binding.articleText.text = articles[position].title
-
-        Glide
-            .with(holder.binding.articleImage.context)
-            .load(articles[position].urlToImage)
+        val url = articles[position].link
+        Glide.with(holder.binding.articleImage.context)
+            .load(articles[position].image_url)
             .error(R.drawable.broken_image)
             .transition(DrawableTransitionOptions.withCrossFade(1000))
             .into(holder.binding.articleImage)
 
-            val url = articles[position].url
 
         holder.binding.articleContainer.setOnClickListener {
 
-            val i = Intent(Intent.ACTION_VIEW, url.toUri())
+            val i = Intent(Intent.ACTION_VIEW, url?.toUri())
             a.startActivity(i)
 
         }
@@ -52,6 +50,7 @@ class NewsAdapter(val a: Activity, val articles: ArrayList<Article>) :
                 .setText(url)
                 .startChooser()
         }
+
     }
 
     override fun getItemCount() = articles.size

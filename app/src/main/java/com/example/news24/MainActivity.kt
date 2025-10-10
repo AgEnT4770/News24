@@ -24,33 +24,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadnews() {
+        val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
+        val selectedCountry = prefs.getString("selected_country", "us") ?: "us"
+
         val retrofit = Retrofit
             .Builder()
-            .baseUrl("https://newsapi.org")
+            .baseUrl("https://newsdata.io")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
         val c = retrofit.create(NewsCallable::class.java)
-        c.getNews().enqueue(object : Callback<News> {
+        c.getNews(
+            country = selectedCountry,
+            category = "politics",
+            size = 10
+        ).enqueue(object : Callback<News> {
+
             override fun onResponse(call: Call<News>, response: Response<News>) {
                 val news = response.body()
-                val articles = news?.articles!!
-               Log.d("Trace", "Articles: $articles")
+                val articles = news?.results ?: arrayListOf()
+                Log.d("Trace", "Articles: $articles")
                 showNews(articles)
                 binding.progress.isVisible = false
-
             }
 
-            override fun onFailure(
-                call: Call<News?>,
-                t: Throwable
-            ) {
-                Log.d("Trace", "Error: ${t.message} ")
+            override fun onFailure(call: Call<News>, t: Throwable) {
+                Log.d("Trace", "Error: ${t.message}")
                 binding.progress.isVisible = false
             }
         })
     }
+
     private fun showNews(articles: ArrayList<Article>) {
         val adapter = NewsAdapter(this, articles)
         binding.newsList.adapter = adapter
     }
+
+    override fun onResume() {
+        super.onResume()
+        loadnews() // ✅ Refresh news with updated country
+    }
+
 }

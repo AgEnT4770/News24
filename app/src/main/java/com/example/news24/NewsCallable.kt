@@ -2,11 +2,15 @@ package com.example.news24
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface NewsCallable {
 
-    @GET("/v2/top-headlines?country=us&category=general&apiKey=d18253509e2840d89b70a994e29dfd0b&pageSize=30")
-    fun getNews(): Call<News>
-
-
+    @GET("/api/1/latest")
+    fun getNews(
+        @Query("apikey") apiKey: String = "pub_2a221485f6e04c939d226af0c2537ef4",
+        @Query("country") country: String,
+        @Query("category") category: String = "politics",
+        @Query("size") size: Int = 10
+    ): Call<News>
 }
