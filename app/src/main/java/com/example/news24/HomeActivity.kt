@@ -14,6 +14,8 @@ import com.example.news24.Category
 import com.example.news24.CategoryAdapter
 import com.example.news24.R
 import com.example.news24.databinding.ActivityHomeBinding
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 
 class HomeActivity : AppCompatActivity() {
@@ -63,7 +65,7 @@ class HomeActivity : AppCompatActivity() {
             val menuItem = menu!!.getItem(i)
             val spanString = SpannableString(menuItem.title)
             spanString.setSpan(
-                ForegroundColorSpan(Color.BLACK), // 👈 change to any color you want
+                ForegroundColorSpan(Color.BLACK),
                 0,
                 spanString.length,
                 0
@@ -88,7 +90,9 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
             R.id.action_logout -> {
-                Toast.makeText(this, "Log out clicked", Toast.LENGTH_SHORT).show()
+                Firebase.auth.signOut()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
