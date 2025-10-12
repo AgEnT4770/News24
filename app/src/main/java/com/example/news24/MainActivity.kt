@@ -13,19 +13,27 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         val categoryFromIntent = intent.getStringExtra("category_name") ?: "top"
-        loadnews(categoryFromIntent)
+        loadNews(categoryFromIntent)
+
+        binding.swipeRefresh.setOnRefreshListener { loadNews(categoryFromIntent) }
     }
 
-    private fun loadnews(category: String) {
+    private fun loadNews(category: String) {
         val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
         val selectedCountry = prefs.getString("selected_country", "us") ?: "us"
 
@@ -48,11 +56,13 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Trace", "Articles: $articles")
                 showNews(articles)
                 binding.progress.isVisible = false
+                binding.swipeRefresh.isRefreshing = false
             }
 
             override fun onFailure(call: Call<News>, t: Throwable) {
                 Log.d("Trace", "Error: ${t.message}")
                 binding.progress.isVisible = false
+                binding.swipeRefresh.isRefreshing = false
             }
         })
     }

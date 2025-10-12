@@ -53,4 +53,5 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     implementation("com.github.bumptech.glide:glide:5.0.5")
     implementation("androidx.preference:preference:1.2.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }
