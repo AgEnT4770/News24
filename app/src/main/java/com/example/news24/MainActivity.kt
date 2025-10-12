@@ -16,14 +16,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
          binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        loadnews()
+        val categoryFromIntent = intent.getStringExtra("category_name") ?: "top"
+        loadnews(categoryFromIntent)
     }
 
-    private fun loadnews() {
+    private fun loadnews(category: String) {
         val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
         val selectedCountry = prefs.getString("selected_country", "us") ?: "us"
 
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val c = retrofit.create(NewsCallable::class.java)
         c.getNews(
             country = selectedCountry,
-            category = "politics",
+            category = category,
             size = 10
         ).enqueue(object : Callback<News> {
 
@@ -60,9 +62,9 @@ class MainActivity : AppCompatActivity() {
         binding.newsList.adapter = adapter
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadnews() // ✅ Refresh news with updated country
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        loadnews(category = categoryFromIntent) // ✅ Refresh news with updated country
+//    }
 
 }

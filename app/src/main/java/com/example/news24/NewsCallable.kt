@@ -10,7 +10,7 @@ interface NewsCallable {
     fun getNews(
         @Query("apikey") apiKey: String = "pub_2a221485f6e04c939d226af0c2537ef4",
         @Query("country") country: String,
-        @Query("category") category: String = "politics",
+        @Query("category") category: String ,
         @Query("size") size: Int = 10
     ): Call<News>
 }
