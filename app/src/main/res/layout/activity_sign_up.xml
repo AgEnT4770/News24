@@ -7,15 +7,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SignUpActivity"
-    android:gravity="center"
-    android:background="@drawable/newspaper">
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/snapnews_icon"
+        android:layout_marginBottom="86dp"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign up"
-        android:layout_marginTop="-120dp"
+        android:text="Create Account"
+        android:layout_marginTop="-80dp"
         android:layout_gravity="center_horizontal"
         style="@style/header_style"/>
 
@@ -23,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/email_text_input_layout"
-        android:paddingTop="40dp"
+        android:paddingTop="20dp"
         app:hintEnabled="false">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
-        android:text = "sign up"
+        android:text = "Sign up"
         style="@style/button_style"/>
 
     <TextView
@@ -92,7 +97,8 @@
         android:layout_height="wrap_content"
         android:text="@string/old_user"
         android:layout_gravity="center_horizontal"
-        style="@style/switch_style" />
+        style="@style/switch_style"
+        android:layout_marginTop="8dp"/>
 
     <ProgressBar
         android:layout_width="wrap_content"

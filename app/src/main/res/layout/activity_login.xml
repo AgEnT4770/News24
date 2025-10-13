@@ -7,14 +7,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".LoginActivity"
-    android:background="@drawable/newspaper"
     android:gravity="center">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/snapnews_icon"
+        android:layout_marginBottom="86dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:layout_marginTop="-120dp"
+        android:layout_marginTop="-80dp"
         android:layout_gravity="center_horizontal"
         style="@style/header_style" />
 
@@ -23,7 +28,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/email_text_input_layout"
         app:hintEnabled="false"
-        android:paddingTop="40dp">
+        android:paddingTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -81,7 +86,8 @@
         android:layout_height="wrap_content"
         android:text="@string/new_user"
         style="@style/switch_style"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"/>
 
     <ProgressBar
         android:layout_width="wrap_content"

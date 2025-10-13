@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "News24"
+rootProject.name = "SnapNews"
 include(":app")
