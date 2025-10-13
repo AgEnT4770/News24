@@ -7,18 +7,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".LoginActivity"
-    android:background="@color/black"
+    android:background="@drawable/newspaper"
     android:gravity="center">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:textSize="80sp"
+        android:layout_marginTop="-120dp"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/red"
-        android:textStyle="bold"
-        style=""/>
+        style="@style/header_style" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -34,7 +32,8 @@
             android:id="@+id/email"
             android:layout_marginHorizontal="32dp"
             android:layout_gravity="center_horizontal"
-            tools:text="Email"/>
+            tools:text="Email"
+            style="@style/edit_text_style" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -50,6 +49,7 @@
             android:layout_height="wrap_content"
             android:hint="password"
             android:id="@+id/pass"
+            style="@style/edit_text_style"
             android:layout_marginHorizontal="32dp"
             android:layout_gravity="center_horizontal"
             android:inputType="textPassword"
@@ -61,7 +61,9 @@
         android:layout_marginHorizontal="32dp"
         android:text="@string/forgot_your_password"
         android:layout_width="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_height="wrap_content"
+        style="@style/switch_style"
         android:layout_gravity="start"/>
 
     <Button
@@ -71,15 +73,15 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
         android:text = "Login"
-        android:backgroundTint="@color/red"/>
+        style="@style/button_style" />
 
     <TextView
         android:id="@+id/New_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/new_user"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@android:color/holo_blue_bright" />
+        style="@style/switch_style"
+        android:layout_gravity="center_horizontal" />
 
     <ProgressBar
         android:layout_width="wrap_content"
