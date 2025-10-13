@@ -8,18 +8,17 @@
     android:orientation="vertical"
     tools:context=".SignUpActivity"
     android:gravity="center"
-    android:background="@color/black">
+    android:background="@drawable/newspaper">
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign up"
-        android:textSize="80sp"
+        android:layout_marginTop="-120dp"
+
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/red"
-        android:textStyle="bold"
-        style=""/>
+        style="@style/header_style"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -35,6 +34,7 @@
             android:id="@+id/email"
             android:layout_marginHorizontal="32dp"
             android:layout_gravity="center_horizontal"
+            style="@style/edit_text_style"
             tools:text="Email"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,6 +54,7 @@
             android:layout_marginHorizontal="32dp"
             android:layout_gravity="center_horizontal"
             android:inputType="textPassword"
+            style="@style/edit_text_style"
             tools:text="password"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,6 +73,7 @@
             android:id="@+id/confirm_pass"
             android:layout_marginHorizontal="32dp"
             android:layout_gravity="center_horizontal"
+            style="@style/edit_text_style"
             android:inputType="textPassword"
             tools:text="confirm password" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -83,7 +85,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
         android:text = "sign up"
-        android:backgroundTint="@color/red"/>
+        style="@style/button_style"/>
 
     <TextView
         android:id="@+id/old_user"
@@ -91,7 +93,7 @@
         android:layout_height="wrap_content"
         android:text="@string/old_user"
         android:layout_gravity="center_horizontal"
-        android:textColor="@android:color/holo_blue_light" />
+        style="@style/switch_style" />
 
     <ProgressBar
         android:layout_width="wrap_content"
