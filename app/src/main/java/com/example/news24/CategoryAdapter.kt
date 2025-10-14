@@ -7,8 +7,7 @@ import com.example.news24.databinding.ItemCategoryBinding
 
 
 class CategoryAdapter(
-    private val categories: List<Category>,
-    private val onItemClick: (Category) -> Unit
+    private val categories: List<Category>, private val onItemClick: (Category) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     inner class CategoryViewHolder(val binding: ItemCategoryBinding) :
@@ -16,9 +15,7 @@ class CategoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding = ItemCategoryBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return CategoryViewHolder(binding)
     }

@@ -32,35 +32,28 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        // Setup Toolbar
         setSupportActionBar(binding.toolbar)
 
-        // RecyclerView setup
         val categories = listOf(
-            Category("" , R.drawable.top),
-            Category("business" , R.drawable.bussiness),
-            Category("sports" , R.drawable.sports),
-            Category("technology" , R.drawable.tech),
-            Category("entertainment" , R.drawable.entertainment)
+            Category("", R.drawable.top),
+            Category("business", R.drawable.bussiness),
+            Category("sports", R.drawable.sports),
+            Category("technology", R.drawable.tech),
+            Category("entertainment", R.drawable.entertainment)
         )
 
         adapter = CategoryAdapter(categories) { category ->
-//            Toast.makeText(this, "${category.title} clicked", Toast.LENGTH_SHORT).show()
-
             val intent = Intent(this, MainActivity::class.java)
-            // optionally send the category name to MainActivity
-            intent.putExtra("category_name", category.title)
+            intent.putExtra(
+                "category_name",
+                if (category.title.isEmpty()) "top" else category.title
+            )
             startActivity(intent)
-
-
         }
-
         binding.recyclerCategories.layoutManager = LinearLayoutManager(this)
         binding.recyclerCategories.adapter = adapter
     }
 
-    // Inflate options menu (3 dots)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
 
@@ -79,7 +72,6 @@ class HomeActivity : AppCompatActivity() {
         return true
     }
 
-    // Handle menu actions
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
@@ -88,16 +80,19 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
-            R.id.action_favorites -> {
-                Toast.makeText(this, "Favorites clicked", Toast.LENGTH_SHORT).show()
-                true
-            }
+
+//            R.id.action_favorites -> {
+//                Toast.makeText(this, "Favorites clicked", Toast.LENGTH_SHORT).show()
+//                true
+//            }
+
             R.id.action_logout -> {
                 Firebase.auth.signOut()
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
