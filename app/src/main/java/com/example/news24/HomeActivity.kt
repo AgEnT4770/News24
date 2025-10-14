@@ -38,11 +38,11 @@ class HomeActivity : AppCompatActivity() {
 
         // RecyclerView setup
         val categories = listOf(
-            Category("top"),
-            Category("business"),
-            Category("sports"),
-            Category("technology"),
-            Category("entertainment")
+            Category("" , R.drawable.top),
+            Category("business" , R.drawable.bussiness),
+            Category("sports" , R.drawable.sports),
+            Category("technology" , R.drawable.tech),
+            Category("entertainment" , R.drawable.entertainment)
         )
 
         adapter = CategoryAdapter(categories) { category ->

@@ -26,6 +26,7 @@ class CategoryAdapter(
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categories[position]
         holder.binding.tvCategoryName.text = category.title
+        holder.binding.imgV.setImageResource(category.img)
 
 
         holder.binding.root.setOnClickListener {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">News24</string>
+    <string name="app_name">SnapNews</string>
     <string name="forgot_your_password"><u> forgot your password? Send Email</u></string>
     <string name="new_user"><u>Dont have an account?sign up</u></string>
     <string name="old_user"><u>Already have an account?sign in</u></string>
