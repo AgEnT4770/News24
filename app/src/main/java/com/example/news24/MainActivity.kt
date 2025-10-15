@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.news24.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,16 +18,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var database: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        database = AppDatabase.getDatabase(this)
 
         val categoryFromIntent = intent.getStringExtra("category_name") ?: "top"
         loadNews(categoryFromIntent)
@@ -53,10 +60,15 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<News>, response: Response<News>) {
                 val news = response.body()
                 val articles = news?.results ?: arrayListOf()
-                Log.d("Trace", "Articles: $articles")
-                showNews(articles)
-                binding.progress.isVisible = false
-                binding.swipeRefresh.isRefreshing = false
+                lifecycleScope.launch {
+                    val favoriteArticles = database.articleDao().getFavoriteArticles()
+                    val favoriteLinks = favoriteArticles.map { it.link }.toSet()
+                    articles.forEach { it.isFavorite = favoriteLinks.contains(it.link) }
+                    Log.d("Trace", "Articles: $articles")
+                    showNews(articles)
+                    binding.progress.isVisible = false
+                    binding.swipeRefresh.isRefreshing = false
+                }
             }
 
             override fun onFailure(call: Call<News>, t: Throwable) {
@@ -68,13 +80,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showNews(articles: ArrayList<Article>) {
-        val adapter = NewsAdapter(this, articles)
+        val adapter = NewsAdapter(this, articles) {
+            lifecycleScope.launch {
+                if (it.isFavorite) {
+                    database.articleDao().insert(it)
+                } else {
+                    database.articleDao().setFavorite(it.link, false)
+                }
+            }
+        }
         binding.newsList.adapter = adapter
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        loadnews(category = categoryFromIntent) // ✅ Refresh news with updated country
-//    }
 
 }

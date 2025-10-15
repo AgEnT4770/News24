@@ -81,10 +81,11 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
 
-//            R.id.action_favorites -> {
-//                Toast.makeText(this, "Favorites clicked", Toast.LENGTH_SHORT).show()
-//                true
-//            }
+            R.id.action_favorites -> {
+                val intent = Intent(this, FavoritesActivity::class.java)
+                startActivity(intent)
+                true
+            }
 
             R.id.action_logout -> {
                 Firebase.auth.signOut()
