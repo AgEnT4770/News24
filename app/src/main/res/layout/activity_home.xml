@@ -21,7 +21,7 @@
         android:id="@+id/recyclerCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:clipToPadding="false"
         tools:listitem="@layout/item_category" />
 
