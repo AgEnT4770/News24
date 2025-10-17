@@ -8,7 +8,7 @@ interface NewsCallable {
 
     @GET("/api/1/latest")
     fun getNews(
-        @Query("apikey") apiKey: String = "pub_2a221485f6e04c939d226af0c2537ef4",
+        @Query("apikey") apiKey: String = "pub_959a925773184f23b86449b39b37ee69",
         @Query("country") country: String,
         @Query("category") category: String ,
         @Query("size") size: Int = 10
