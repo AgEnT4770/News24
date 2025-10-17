@@ -9,7 +9,7 @@
     card_view:cardElevation="6dp"
     card_view:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -42,8 +42,12 @@
             android:text="Category"
             android:textColor="@android:color/white"
             android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="@id/img_v"
+            card_view:layout_constraintTop_toTopOf="@id/img_v"
+            card_view:layout_constraintEnd_toEndOf="@id/img_v"
+            card_view:layout_constraintBottom_toBottomOf="@id/img_v"/>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
