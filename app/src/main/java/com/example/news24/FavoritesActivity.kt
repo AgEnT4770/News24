@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 
 class FavoritesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoritesBinding
-    private lateinit var database: AppDatabase
     private lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,28 +31,12 @@ class FavoritesActivity : AppCompatActivity() {
             insets
         }
 
-        database = AppDatabase.getDatabase(this)
+
 
         if(!isOnline(this)) {
             binding.progress.isVisible = true
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show()
-            lifecycleScope.launch {
-                binding.progress.isVisible = false
-                val favoriteArticles = database.articleDao().getFavoriteArticles()
-                adapter =
-                    NewsAdapter(this@FavoritesActivity, ArrayList(favoriteArticles)) { article ->
-                        lifecycleScope.launch {
-                            database.articleDao().setFavorite(article.link, false)
-                            val position = adapter.articles.indexOf(article)
-                            if (position != -1) {
-                                adapter.articles.removeAt(position)
-                                adapter.notifyItemRemoved(position)
-                            }
-                        }
-                    }
-                binding.favoritesList.adapter = adapter
-                binding.favoritesList.layoutManager = LinearLayoutManager(this@FavoritesActivity)
-            }
+
         }
         else {
             fetchFavoriteFromFirestore()
@@ -79,7 +62,8 @@ class FavoritesActivity : AppCompatActivity() {
         val userId = Firebase.auth.currentUser?.uid!!
 
         val db = Firebase.firestore
-        val favoritesCollection = db.collection("users").document(userId).collection("favorites")
+        val favoritesCollection = db.collection("users").
+        document(userId).collection("favorites")
 
 
         favoritesCollection.get()

@@ -8,10 +8,9 @@ data class News(
     val results: ArrayList<Article>
 )
 
-@Entity(tableName = "articles")
 data class Article(
     val title: String?,
-    @PrimaryKey val link: String,
+     val link: String,
     val image_url: String?,
     var isFavorite: Boolean = false,
 )

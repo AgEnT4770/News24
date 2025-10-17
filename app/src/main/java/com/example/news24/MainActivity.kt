@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var database: AppDatabase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        database = AppDatabase.getDatabase(this)
 
         val categoryFromIntent = intent.getStringExtra("category_name") ?: "top"
         loadNews(categoryFromIntent)
@@ -61,9 +60,6 @@ class MainActivity : AppCompatActivity() {
                 val news = response.body()
                 val articles = news?.results ?: arrayListOf()
                 lifecycleScope.launch {
-                    val favoriteArticles = database.articleDao().getFavoriteArticles()
-                    val favoriteLinks = favoriteArticles.map { it.link }.toSet()
-                    articles.forEach { it.isFavorite = favoriteLinks.contains(it.link) }
                     Log.d("Trace", "Articles: $articles")
                     showNews(articles)
                     binding.progress.isVisible = false
@@ -81,13 +77,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showNews(articles: ArrayList<Article>) {
         val adapter = NewsAdapter(this, articles) {
-            lifecycleScope.launch {
-                if (it.isFavorite) {
-                    database.articleDao().insert(it)
-                } else {
-                    database.articleDao().setFavorite(it.link, false)
-                }
-            }
         }
         binding.newsList.adapter = adapter
     }
