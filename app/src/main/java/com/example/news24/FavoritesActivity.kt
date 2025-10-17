@@ -85,6 +85,7 @@ class FavoritesActivity : AppCompatActivity() {
                         if (!docsToRemove.isEmpty) {
                             for (doc in docsToRemove) {
                                 favoritesCollection.document(doc.id).delete()
+
                             }
                             val position = adapter.articles.indexOf(article)
                             if (position != -1) {

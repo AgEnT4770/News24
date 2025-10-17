@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 class FavoriteArticles(
     val title: String? = "",
     val link: String = "",
-    val imageUrl: String? = "",
+    val image_url: String? = "",
     var isFavorite: Boolean = false,
     val id : String = ""
 )
