@@ -13,5 +13,5 @@ data class Article(
     val title: String?,
     @PrimaryKey val link: String,
     val image_url: String?,
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
 )
