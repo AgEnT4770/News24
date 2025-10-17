@@ -59,8 +59,7 @@ class FavoritesActivity : AppCompatActivity() {
         }
         binding.favoritesList.adapter = adapter
         binding.favoritesList.layoutManager = LinearLayoutManager(this)
-        binding.emptyTex
-        t.text = "No favorites yet."
+        binding.emptyText.text = "No favorites yet."
     }
 
     private fun isOnline(context: Context): Boolean {
