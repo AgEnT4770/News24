@@ -56,7 +56,7 @@ class NewsAdapter(
         val db = Firebase.firestore
         val favoritesRef = db.collection("users").document(userId).collection("favorites")
 
-        // ✅ Check Firestore to update icon correctly
+        
         favoritesRef.document(article.link.hashCode().toString())
             .get()
             .addOnSuccessListener { snapshot ->
@@ -73,13 +73,12 @@ class NewsAdapter(
                 }
             }
 
-        // ✅ Handle favorite button clicks
+
         binding.favouriteFab.setOnClickListener {
             val favDoc = favoritesRef.document(article.link.hashCode().toString())
             val currentArticle = FavoriteArticles(article.title, article.link, article.image_url, true)
 
             if (article.isFavorite) {
-                // remove from Firestore
                 favDoc.delete()
                     .addOnSuccessListener {
                         article.isFavorite = false
@@ -93,7 +92,6 @@ class NewsAdapter(
                         Toast.makeText(a, "Failed to remove favorite", Toast.LENGTH_SHORT).show()
                     }
             } else {
-                // add to Firestore (no duplicates)
                 favDoc.set(currentArticle)
                     .addOnSuccessListener {
                         article.isFavorite = true

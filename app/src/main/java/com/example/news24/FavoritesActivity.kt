@@ -36,7 +36,6 @@ class FavoritesActivity : AppCompatActivity() {
         if(!isOnline(this)) {
             binding.progress.isVisible = true
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show()
-
         }
         else {
             fetchFavoriteFromFirestore()
