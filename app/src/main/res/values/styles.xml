@@ -24,7 +24,7 @@
     </style>
 
     <style name="switch_style">
-        <item name="android:textColor">@color/link</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>

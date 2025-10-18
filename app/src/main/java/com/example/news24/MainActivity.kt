@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
         loadNews(categoryFromIntent)
 
         binding.swipeRefresh.setOnRefreshListener { loadNews(categoryFromIntent) }
+        binding.progress.isVisible = true
+
     }
 
     private fun loadNews(category: String) {
@@ -65,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         ).enqueue(object : Callback<News> {
 
             override fun onResponse(call: Call<News>, response: Response<News>) {
+                binding.progress.isVisible = false
                 val news = response.body()
                 val newArticles = news?.results ?: arrayListOf()
                 lifecycleScope.launch {

@@ -48,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
             if (email.isBlank() || pass.isBlank()) {
                 Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
             } else {
-                //Login code
                 binding.progress.isVisible = true
                 login(email, pass)
             }
