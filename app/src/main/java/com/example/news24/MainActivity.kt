@@ -18,6 +18,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: NewsAdapter
+    private val articles = ArrayList<Article>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +34,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        adapter = NewsAdapter(this, articles) {
+            // In this activity, we don't need to do anything on favorite clicked
+            // because the adapter already handles the UI update (icon change)
+            // and the database operation.
+        }
+        binding.newsList.adapter = adapter
 
         val categoryFromIntent = intent.getStringExtra("category_name") ?: "top"
         loadNews(categoryFromIntent)
@@ -58,10 +66,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<News>, response: Response<News>) {
                 val news = response.body()
-                val articles = news?.results ?: arrayListOf()
+                val newArticles = news?.results ?: arrayListOf()
                 lifecycleScope.launch {
-                    Log.d("Trace", "Articles: $articles")
-                    showNews(articles)
+                    Log.d("Trace", "Articles: $newArticles")
+                    showNews(newArticles)
                     binding.progress.isVisible = false
                     binding.swipeRefresh.isRefreshing = false
                 }
@@ -75,10 +83,13 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun showNews(articles: ArrayList<Article>) {
-        val adapter = NewsAdapter(this, articles) {
-        }
-        binding.newsList.adapter = adapter
+    private fun showNews(newArticles: ArrayList<Article>) {
+        // De-duplicate the list before showing the news
+        val distinctArticles = newArticles.toSet().toList()
+
+        articles.clear()
+        articles.addAll(distinctArticles)
+        adapter.notifyDataSetChanged() // Use notifyDataSetChanged here because the whole list has changed
     }
 
 }

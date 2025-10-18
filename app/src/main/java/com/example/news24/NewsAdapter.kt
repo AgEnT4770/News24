@@ -2,9 +2,9 @@ package com.example.news24
 
 import android.app.Activity
 import android.content.Intent
-import android.widget.Toast
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -52,61 +52,70 @@ class NewsAdapter(
                 .startChooser()
         }
 
-        val userId = Firebase.auth.currentUser?.uid ?: return
-        val db = Firebase.firestore
-        val favoritesRef = db.collection("users").document(userId).collection("favorites")
+        // Check Firestore for the true favorite status
+        val userId = Firebase.auth.currentUser?.uid
+        if (userId == null) {
+            // If user isn't logged in, they can't have favorites.
+            article.isFavorite = false
+            binding.favouriteFab.setImageDrawable(ContextCompat.getDrawable(a, R.drawable.ic_favorite_border))
+        } else {
+            // Check the database to see what the real state is.
+            val db = Firebase.firestore
+            val favDoc = db.collection("users").document(userId)
+                .collection("favorites")
+                .document(article.link.hashCode().toString())
 
-        
-        favoritesRef.document(article.link.hashCode().toString())
-            .get()
-            .addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    article.isFavorite = true
-                    binding.favouriteFab.setImageDrawable(
-                        ContextCompat.getDrawable(a, R.drawable.ic_favorite)
-                    )
+            favDoc.get().addOnSuccessListener { document ->
+                val isFavorite = document.exists()
+                article.isFavorite = isFavorite
+                if (isFavorite) {
+                    binding.favouriteFab.setImageDrawable(ContextCompat.getDrawable(a, R.drawable.ic_favorite))
                 } else {
-                    article.isFavorite = false
-                    binding.favouriteFab.setImageDrawable(
-                        ContextCompat.getDrawable(a, R.drawable.ic_favorite_border)
-                    )
+                    binding.favouriteFab.setImageDrawable(ContextCompat.getDrawable(a, R.drawable.ic_favorite_border))
                 }
+            }.addOnFailureListener {
+                // If the check fails, assume it's not a favorite.
+                article.isFavorite = false
+                binding.favouriteFab.setImageDrawable(ContextCompat.getDrawable(a, R.drawable.ic_favorite_border))
             }
-
+        }
 
         binding.favouriteFab.setOnClickListener {
-            val favDoc = favoritesRef.document(article.link.hashCode().toString())
-            val currentArticle = FavoriteArticles(article.title, article.link, article.image_url, true)
+            val currentPosition = holder.adapterPosition
+            if (currentPosition == RecyclerView.NO_POSITION) {
+                return@setOnClickListener
+            }
+            val currentArticle = articles[currentPosition]
 
-            if (article.isFavorite) {
-                favDoc.delete()
+            val uid = Firebase.auth.currentUser?.uid ?: return@setOnClickListener
+            val db = Firebase.firestore
+            val favoritesRef = db.collection("users").document(uid).collection("favorites")
+            val document = favoritesRef.document(currentArticle.link.hashCode().toString())
+
+            if (currentArticle.isFavorite) {
+                document.delete()
                     .addOnSuccessListener {
-                        article.isFavorite = false
-                        binding.favouriteFab.setImageDrawable(
-                            ContextCompat.getDrawable(a, R.drawable.ic_favorite_border)
-                        )
+                        currentArticle.isFavorite = false
+                        binding.favouriteFab.setImageDrawable(ContextCompat.getDrawable(a, R.drawable.ic_favorite_border))
                         Toast.makeText(a, "Removed from favorites", Toast.LENGTH_SHORT).show()
-                        notifyItemChanged(position)
+                        onFavoriteClicked(currentArticle)
                     }
                     .addOnFailureListener {
                         Toast.makeText(a, "Failed to remove favorite", Toast.LENGTH_SHORT).show()
                     }
             } else {
-                favDoc.set(currentArticle)
+                val favoriteArticle = FavoriteArticles(currentArticle.title, currentArticle.link, currentArticle.image_url, true)
+                document.set(favoriteArticle)
                     .addOnSuccessListener {
-                        article.isFavorite = true
-                        binding.favouriteFab.setImageDrawable(
-                            ContextCompat.getDrawable(a, R.drawable.ic_favorite)
-                        )
+                        currentArticle.isFavorite = true
+                        binding.favouriteFab.setImageDrawable(ContextCompat.getDrawable(a, R.drawable.ic_favorite))
                         Toast.makeText(a, "Added to favorites", Toast.LENGTH_SHORT).show()
+                        onFavoriteClicked(currentArticle) // Notify activity
                     }
                     .addOnFailureListener {
                         Toast.makeText(a, "Failed to add favorite", Toast.LENGTH_SHORT).show()
                     }
             }
-
-            onFavoriteClicked(article)
-            notifyItemChanged(position)
         }
     }
 
